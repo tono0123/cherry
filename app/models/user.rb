@@ -9,6 +9,6 @@ class User < ActiveRecord::Base
 
 	# VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 	# validates :mail, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
-	# validates :tel, presence: true, format: { with: /¥d/ }
+	# validates :tel, presence: true, numericality: {only_integer: true} # , format: { with: /¥d/ }
 
 end

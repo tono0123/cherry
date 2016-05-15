@@ -26,15 +26,55 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
 
-    # こっから
+    # after ##########################################################################
+    # respond_to do |format|
+    #   if @user.save
+    #     format.html { redirect_to @user, notice: 'User was successfully created.' }
+    #     format.json { render :show, status: :created, location: @user }
+    #   else
+    #     format.html { render :new }
+    #     format.json { render json: @user.errors, status: :unprocessable_entity }
+    #   end
+    # end
+    # after ##########################################################################
 
-p "-------------------------------------------------"
-p @user
-p "-------------------------------------------------"
-    # ここまで
 
+    # before ##########################################################################
     respond_to do |format|
-      if @user.save
+
+      # company
+      unless @user.company.present?
+        @user.errors.add(:invalid, "company")
+      end
+
+      # sei
+      unless @user.sei.present? && @user.sei.length < 50
+        @user.errors.add(:invalid, "sei")
+      end
+
+      # mei
+      unless @user.mei.present? && @user.mei.length < 50
+        @user.errors.add(:invalid, "sei")
+      end
+
+      # postal_code
+      unless @user.postal_code =~ /¥d/
+        @user.errors.add(:invalid, "半角数字のみ入力できます")
+      end
+
+      # mail
+      unless @user.mail.present? && @user.mail =~ /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+        @user.errors.add(:invalid, "mail")
+      end
+
+      # tel
+      unless @user.tel.present? && @user.tel =~ /¥d/
+        @user.errors.add(:invalid, "tel")
+      end
+
+      # エラーがなかったらOK
+      unless @user.errors.present?
+        @user.save
         format.html { redirect_to @user, notice: 'User was successfully created.' }
         format.json { render :show, status: :created, location: @user }
       else
@@ -42,6 +82,9 @@ p "-------------------------------------------------"
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
+
+    # before ##########################################################################
+
   end
 
   # PATCH/PUT /users/1
