@@ -49,4 +49,10 @@ end
 
 gem 'jp_prefecture'
 
+gem 'less-rails'
+gem 'therubyracer'
+gem 'execjs'
+gem 'twitter-bootstrap-rails'
+
+
 
